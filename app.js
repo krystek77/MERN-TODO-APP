@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('express');
+const bodyParser = require('body-parser');
 //
 const app = express();
 //
@@ -7,6 +8,7 @@ const userRoutes = require('./api/routes/users');
 const taskRoutes = require('./api/routes/tasks');
 //
 app.use(morgan('dev'));
+app.use(bodyParser.json());
 
 //Routes
 app.use('/users', userRoutes);

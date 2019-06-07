@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-	res.status(200).json({ message: 'all users' });
+router.post('/', (req, res, next) => {
+	const newUser = { name: req.body.name };
+	res.status(201).json(newUser);
 });
 
 module.exports = router;
