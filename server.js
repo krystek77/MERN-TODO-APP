@@ -1,5 +1,7 @@
 const http = require('http');
 const moongose = require('mongoose');
+const db = require('./config/db');
+
 const app = require('./app');
 //
 const PORT = 4000;
@@ -8,7 +10,7 @@ server.listen(process.env.PORT || PORT, () => console.log(`Server running on ${P
 
 //Connect to db
 moongose
-	.connect('mongodb+srv://atlasMern:atlasMern@mern-wwfsy.mongodb.net/test?retryWrites=true&w=majority', {
+	.connect(db.mongoURI, {
 		useNewUrlParser: true,
 	})
 	.then(result => console.log('Connected to the database successfully'))
