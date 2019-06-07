@@ -12,6 +12,7 @@ server.listen(process.env.PORT || PORT, () => console.log(`Server running on ${P
 moongose
 	.connect(db.mongoURI, {
 		useNewUrlParser: true,
+		useCreateIndex: true,
 	})
 	.then(result => console.log('Connected to the database successfully'))
 	.catch(error => console.log('The connection to the database failed'));
