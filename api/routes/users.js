@@ -10,4 +10,10 @@ const UserController = require('../controllers/user');
 
 router.post('/signup', UserController.signUp);
 
+// @route 	POST users/signin
+// @desc 	Login user
+// @access 	Public
+
+router.post('/signin', UserController.signIn);
+
 module.exports = router;
