@@ -1,6 +1,6 @@
 const http = require('http');
 const moongose = require('mongoose');
-const db = require('./config/db');
+const config = require('config');
 
 const app = require('./app');
 //
@@ -9,8 +9,10 @@ const server = http.createServer(app);
 server.listen(process.env.PORT || PORT, () => console.log(`Server running on ${PORT} port`));
 
 //Connect to db
+const db = config.get('mongoURI');
+
 moongose
-	.connect(db.mongoURI, {
+	.connect(db, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
 	})

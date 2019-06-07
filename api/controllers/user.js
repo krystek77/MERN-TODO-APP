@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 
 //User model
 const User = require('../models/user');
@@ -38,17 +40,26 @@ exports.signUp = (req, res, next) => {
 					newUser
 						.save()
 						.then(user => {
-							console.log(user);
-							res.status(201).json({
-								user: {
-									id: user._id,
-									firstName: user.firstName,
-									lastName: user.lastName,
-									email: user.email,
-									phone: user.phone,
-									job: user.job,
-								},
-							});
+							//create token for registered user
+							jwt.sign(
+								{ id: user._id, email: user.email },
+								config.get('jwtSecret'),
+								{ expiresIn: 3600 },
+								(error, token) => {
+									if (error) return res.status(400).json({ message: 'Creating token failed' });
+									res.status(201).json({
+										token: token,
+										user: {
+											id: user._id,
+											firstName: user.firstName,
+											lastName: user.lastName,
+											email: user.email,
+											phone: user.phone,
+											job: user.job,
+										},
+									});
+								}
+							);
 						})
 						.catch(error => {
 							console.log(error);
@@ -62,4 +73,6 @@ exports.signUp = (req, res, next) => {
 			res.status(500).json({ message: 'Something went wrong...' });
 		});
 };
-exports.signIn = (req, res, next) => {};
+exports.signIn = (req, res, next) => {
+	
+};
