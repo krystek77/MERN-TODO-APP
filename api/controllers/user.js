@@ -74,5 +74,41 @@ exports.signUp = (req, res, next) => {
 		});
 };
 exports.signIn = (req, res, next) => {
-	
+	const { email, password } = req.body;
+	User.findOne({ email: email })
+		.then(user => {
+			if (!user) return res.status(400).json({ message: 'User does not exist...' });
+			bcrypt
+				.compare(password, user.password)
+				.then(isMatch => {
+					if (!isMatch) return res.status(400).json({ message: 'Invalid credetials' });
+					jwt.sign(
+						{ id: user._id, email: user.email },
+						config.get('jwtSecret'),
+						{ expiresIn: 3600 },
+						(error, token) => {
+							if (error) return res.status(400).json({ message: 'Creating token failed' });
+							res.status(201).json({
+								token: token,
+								user: {
+									id: user._id,
+									firstName: user.firstName,
+									lastName: user.lastName,
+									email: user.email,
+									phone: user.phone,
+									job: user.job,
+								},
+							});
+						}
+					);
+				})
+				.catch(error => console.log(error));
+		})
+		.catch(error => console.log(error));
+};
+exports.getAuthUser = (req, res, next) => {
+	User.findById(req.user.id) //from token payload
+		.select('-password')
+		.then(user => res.status(200).json(user))
+		.catch(error => console.log(error));
 };

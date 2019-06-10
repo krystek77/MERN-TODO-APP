@@ -1,13 +1,17 @@
 const express = require('express');
 const morgan = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 //
 const app = express();
 //
+app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 const userRoutes = require('./api/routes/users');
 const taskRoutes = require('./api/routes/tasks');
 //
-app.use(morgan('dev'));
+//
+app.use(cors());
 app.use(bodyParser.json());
 
 //Routes
