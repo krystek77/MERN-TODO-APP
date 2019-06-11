@@ -9,15 +9,13 @@ app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
 const userRoutes = require('./api/routes/users');
 const taskRoutes = require('./api/routes/tasks');
-//
+
 //
 app.use(cors());
 app.use(bodyParser.json());
-
 //Routes
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
-
 //Handle errors
 app.use((req, res, next) => {
 	const error = new Error('NOT FOUNDED');

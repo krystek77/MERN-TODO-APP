@@ -71,7 +71,7 @@ router.put('/:idTask', (req, res, next) => {
 // @access 	Public
 router.post('/', upload.single('image'), (req, res, next) => {
 	const { title, priority, description, deadline } = req.body;
-	console.log(req.file);
+
 	const task = new Task({
 		title: title,
 		priority: priority,
@@ -84,7 +84,10 @@ router.post('/', upload.single('image'), (req, res, next) => {
 		.then(task => {
 			res.status(201).json(task);
 		})
-		.catch(error => res.status(400).json({ message: 'Adding new task failed' }));
+		.catch(error => {
+			console.log(error);
+			res.status(400).json({ message: 'Adding new task failed' });
+		});
 });
 
 module.exports = router;
