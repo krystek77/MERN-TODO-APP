@@ -89,5 +89,27 @@ router.post('/', upload.single('image'), (req, res, next) => {
 			res.status(400).json({ message: 'Adding new task failed' });
 		});
 });
-
+//@route DELETE tasks/:idTask
+//@desc Delete one task
+//@access Public
+router.delete('/:idTask', (req, res, next) => {
+	const id = req.params.idTask;
+	Task.findById(id)
+		.then(task => {
+			if (!task) return res.status(400).json({ message: `Task width id ${id} does not exist` });
+			Task.deleteOne({ _id: id })
+				.then(result => {
+					console.log('Deleted task succesffuly');
+					res.status(200).json({ message: 'Deleting task successfully', result });
+				})
+				.catch(error => {
+					console.log('Deleting task failed');
+					res.status(400).json({ message: 'Deleting task failed' });
+				});
+		})
+		.catch(error => {
+			console.log('Something went wrong...');
+			res.status(400).json({ message: 'Something went wrong..., maybe wrong length of id' });
+		});
+});
 module.exports = router;
