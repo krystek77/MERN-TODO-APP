@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({
 	storage: storage,
 });
-
+//................................................................
 //@route	GET tasks/
 //@desc		Get all tasks
 //@access	Public
@@ -111,6 +111,33 @@ router.put('/:idTask', upload.single('image'), (req, res, next) => {
 					res.status(200).json({ task: task, message: `Task with id ${id} was updated successfully` });
 				})
 				.catch(error => res.status(400).json({ message: `Task with id ${id} was not updated` }));
+		})
+		.catch(error => res.status(404).json({ message: 'Something went wrong...' }));
+});
+//@route PUT tasks/finish/:idTask
+//@desc Finish task
+//@access Public
+router.put('/finish/:idTask', (req, res, next) => {
+	const id = req.params.idTask;
+	Task.findById(id)
+		.then(task => {
+			if (!task) return res.status(404).json({ message: 'Task does not exist' });
+
+			task.title = req.body.title;
+			task.priority = req.body.priority;
+			task.deadline = req.body.deadline;
+			task.description = req.body.description;
+			task.createdAt = req.body.createdAt;
+			task.finished = req.body.finished;
+			task.updatedAt = req.body.updatedAt;
+
+			task.save()
+				.then(result => {
+					res.status(200).json({
+						message: `Task with id ${id} ${task.finished ? 'was finished' : 'was not finished'}`,
+					});
+				})
+				.catch(error => res.status(400).json({ message: `Task with id ${id} was not finished` }));
 		})
 		.catch(error => res.status(404).json({ message: 'Something went wrong...' }));
 });
