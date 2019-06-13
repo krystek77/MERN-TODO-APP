@@ -42,30 +42,6 @@ router.get('/:idTask', (req, res, next) => {
 		})
 		.catch(error => res.status(400).json({ message: `Searching task with id ${id} failed` }));
 });
-//@route PUT tasks/:idTask
-//@desc Update task
-//@access Public
-
-router.put('/:idTask', (req, res, next) => {
-	const id = req.params.idTask;
-	const { title, description, priority, createdAt, deadline } = req.body;
-
-	Task.findById(id)
-		.then(task => {
-			if (!task) res.status(400).json({ message: `Task width id ${id} does not exist` });
-			task.title = title;
-			task.description = description;
-			task.priority = priority;
-			task.deadline = deadline;
-			task.updatedAt = new Date().toISOString().slice(0, 10);
-			task.createdAt = createdAt;
-			task.save()
-				.then(result => res.status(201).json(task))
-				.catch(error => res.status(400).json({ message: 'Something went wrong' }));
-		})
-		.catch(error => res.status(500).json({ message: `Updating failed` }));
-});
-
 // @route 	POST tasks/
 // @desc 	Add new task
 // @access 	Public
@@ -78,7 +54,7 @@ router.post('/', upload.single('image'), (req, res, next) => {
 		description: description,
 		deadline: deadline,
 		createdAt: new Date().toISOString().slice(0, 10),
-		image: req.file.path,
+		image: req.file ? req.file.path : '',
 	});
 	task.save()
 		.then(task => {
@@ -111,5 +87,31 @@ router.delete('/:idTask', (req, res, next) => {
 			console.log('Something went wrong...');
 			res.status(400).json({ message: 'Something went wrong..., maybe wrong length of id' });
 		});
+});
+//@route PUT tasks/:idTask
+//desc Update task
+//access Public
+router.put('/:idTask', upload.single('image'), (req, res, next) => {
+	const id = req.params.idTask;
+	Task.findById(id)
+		.then(task => {
+			if (!task) return res.status(404).json({ message: 'Task does not exist' });
+
+			task.title = req.body.title;
+			task.priority = req.body.priority;
+			task.deadline = req.body.deadline;
+			task.description = req.body.description;
+			task.image = req.file ? req.file.path : task.image;
+			task.createdAt = req.body.createdAt;
+			task.finished = req.body.finished;
+			task.updatedAt = req.body.updatedAt;
+
+			task.save()
+				.then(result => {
+					res.status(200).json({ task: task, message: `Task with id ${id} was updated successfully` });
+				})
+				.catch(error => res.status(400).json({ message: `Task with id ${id} was not updated` }));
+		})
+		.catch(error => res.status(404).json({ message: 'Something went wrong...' }));
 });
 module.exports = router;
