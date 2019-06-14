@@ -7,6 +7,10 @@ const UserController = require('../controllers/user');
 // @route 	POST users/signup
 // @desc 	Register new user
 // @access 	Public
+router.get('/', UserController.getAllUsers);
+// @route 	POST users/signup
+// @desc 	Register new user
+// @access 	Public
 
 router.post('/signup', UserController.signUp);
 

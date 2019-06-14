@@ -4,7 +4,21 @@ const jwt = require('jsonwebtoken');
 
 //User model
 const User = require('../models/user');
-
+//
+exports.getAllUsers = (req, res, next) => {
+	User.find()
+		.select('-__v -password')
+		.sort({ createdAt: 'desc' })
+		.then(users => {
+			console.log(users);
+			res.status(200).json({ users: users, message: `Get users successfully` });
+		})
+		.catch(error => {
+			console.log(error);
+			res.status(200).json({ message: `Get users failed` });
+		});
+};
+//
 exports.signUp = (req, res, next) => {
 	const { email, password, firstName, lastName, phone, job, country } = req.body;
 	//simple validation
@@ -13,6 +27,7 @@ exports.signUp = (req, res, next) => {
 			message: `Please provide required fields`,
 		});
 	}
+
 	User.findOne({ email: req.body.email })
 		.then(user => {
 			if (user) return res.status(400).json({ message: 'User already exists. Sign in ...' });
@@ -73,6 +88,7 @@ exports.signUp = (req, res, next) => {
 			res.status(500).json({ message: 'Something went wrong...' });
 		});
 };
+//
 exports.signIn = (req, res, next) => {
 	const { email, password } = req.body;
 	User.findOne({ email: email })
@@ -106,9 +122,10 @@ exports.signIn = (req, res, next) => {
 		})
 		.catch(error => console.log(error));
 };
+//
 exports.getAuthUser = (req, res, next) => {
 	User.findById(req.user.id) //from token payload
-		.select('-password')
+		.select('-password -__v')
 		.then(user => res.status(200).json(user))
 		.catch(error => console.log(error));
 };
