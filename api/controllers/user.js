@@ -126,6 +126,5 @@ exports.signIn = (req, res, next) => {
 exports.getAuthUser = (req, res, next) => {
 	User.findById(req.user.id) //from token payload
 		.select('-password -__v')
-		.then(user => res.status(200).json(user))
-		.catch(error => console.log(error));
+		.then(user => res.status(200).json(user));
 };

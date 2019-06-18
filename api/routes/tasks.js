@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Task = require('../models/task');
+const auth = require('../middleware/auth');
 
 const storage = multer.diskStorage({
 	destination: function(req, file, cb) {
@@ -44,8 +45,8 @@ router.get('/:idTask', (req, res, next) => {
 });
 // @route 	POST tasks/
 // @desc 	Add new task
-// @access 	Public
-router.post('/', upload.single('image'), (req, res, next) => {
+// @access 	Private
+router.post('/', auth, upload.single('image'), (req, res, next) => {
 	const { title, priority, description, deadline } = req.body;
 
 	const task = new Task({
@@ -67,8 +68,8 @@ router.post('/', upload.single('image'), (req, res, next) => {
 });
 //@route DELETE tasks/:idTask
 //@desc Delete one task
-//@access Public
-router.delete('/:idTask', (req, res, next) => {
+//@access Private
+router.delete('/:idTask', auth, (req, res, next) => {
 	const id = req.params.idTask;
 	Task.findById(id)
 		.then(task => {
