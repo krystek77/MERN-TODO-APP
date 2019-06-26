@@ -19,8 +19,8 @@ const upload = multer({
 //................................................................
 //@route	GET tasks/
 //@desc		Get all tasks
-//@access	Public
-router.get('/', (req, res, next) => {
+//@access	Private
+router.get('/', auth, (req, res, next) => {
 	Task.find()
 		.select('-__v')
 		.then(tasks => {
@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
 });
 //@route	GET tasks/:idTask
 //@desc		Get task by id
-//@access	Public
+//@access	Private
 router.get('/:idTask', (req, res, next) => {
 	const id = req.params.idTask;
 	Task.findById(id)
@@ -46,7 +46,7 @@ router.get('/:idTask', (req, res, next) => {
 // @route 	POST tasks/
 // @desc 	Add new task
 // @access 	Private
-router.post('/', auth, upload.single('image'), (req, res, next) => {
+router.post('/', upload.single('image'), (req, res, next) => {
 	const { title, priority, description, deadline } = req.body;
 
 	const task = new Task({
@@ -69,7 +69,7 @@ router.post('/', auth, upload.single('image'), (req, res, next) => {
 //@route DELETE tasks/:idTask
 //@desc Delete one task
 //@access Private
-router.delete('/:idTask', auth, (req, res, next) => {
+router.delete('/:idTask', (req, res, next) => {
 	const id = req.params.idTask;
 	Task.findById(id)
 		.then(task => {
@@ -91,7 +91,7 @@ router.delete('/:idTask', auth, (req, res, next) => {
 });
 //@route PUT tasks/:idTask
 //desc Update task
-//access Public
+//access Private
 router.put('/:idTask', upload.single('image'), (req, res, next) => {
 	const id = req.params.idTask;
 	Task.findById(id)
@@ -117,7 +117,7 @@ router.put('/:idTask', upload.single('image'), (req, res, next) => {
 });
 //@route PUT tasks/finish/:idTask
 //@desc Finish task
-//@access Public
+//@access Private
 router.put('/finish/:idTask', (req, res, next) => {
 	const id = req.params.idTask;
 	Task.findById(id)

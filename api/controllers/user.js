@@ -23,14 +23,19 @@ exports.signUp = (req, res, next) => {
 	const { email, password, firstName, lastName, phone, job, country } = req.body;
 	//simple validation
 	if (!email || !password) {
-		res.status(400).json({
+		return res.status(400).json({
 			message: `Please provide required fields`,
+			status: 400,
+			id: 'EMPTY_FIELD',
 		});
 	}
 
 	User.findOne({ email: req.body.email })
 		.then(user => {
-			if (user) return res.status(400).json({ message: 'User already exists. Sign in ...' });
+			if (user)
+				return res
+					.status(409)
+					.json({ message: 'User already exists. Sign in ...', status: 409, id: 'USER_EXISTS' });
 			//return null if does not exist
 			return user;
 		})
@@ -48,7 +53,7 @@ exports.signUp = (req, res, next) => {
 			bcrypt.genSalt(10, (error, salt) => {
 				if (error) return;
 				bcrypt.hash(newUser.password, salt, (error, hash) => {
-					if (error) return res.status(500).json({ message: 'Can not hash password' });
+					if (error) return res.status(500).json({ message: 'Can not hash password', status: 500 });
 					//
 					newUser.password = hash;
 					//
@@ -61,7 +66,8 @@ exports.signUp = (req, res, next) => {
 								config.get('jwtSecret'),
 								{ expiresIn: 3600 },
 								(error, token) => {
-									if (error) return res.status(400).json({ message: 'Creating token failed' });
+									if (error)
+										return res.status(400).json({ message: 'Creating token failed', status: 400 });
 									res.status(201).json({
 										token: token,
 										user: {
@@ -71,6 +77,7 @@ exports.signUp = (req, res, next) => {
 											email: user.email,
 											phone: user.phone,
 											job: user.job,
+											country: user.country,
 										},
 									});
 								}
@@ -78,7 +85,7 @@ exports.signUp = (req, res, next) => {
 						})
 						.catch(error => {
 							console.log(error);
-							res.status(400).json({ message: 'User registration failed' });
+							res.status(400).json({ message: 'User registration failed', status: 400 });
 						});
 				});
 			});
@@ -91,19 +98,37 @@ exports.signUp = (req, res, next) => {
 //
 exports.signIn = (req, res, next) => {
 	const { email, password } = req.body;
+	if (!email || !password) {
+		return res.status(400).json({
+			message: `Please provide required fields`,
+			status: 400,
+			id: 'EMPTY_FIELD',
+		});
+	}
 	User.findOne({ email: email })
 		.then(user => {
-			if (!user) return res.status(400).json({ message: 'User does not exist...' });
+			if (!user)
+				return res
+					.status(409)
+					.json({ message: 'User does not exist...', status: 409, id: 'USER_DOES_NOT_EXIST' });
 			bcrypt
 				.compare(password, user.password)
 				.then(isMatch => {
-					if (!isMatch) return res.status(400).json({ message: 'Invalid credetials' });
+					if (!isMatch)
+						return res
+							.status(403)
+							.json({ message: 'Invalid credentials', status: 403, id: 'INVALID_CREDENTIALS' });
 					jwt.sign(
 						{ id: user._id, email: user.email },
 						config.get('jwtSecret'),
 						{ expiresIn: 3600 },
 						(error, token) => {
-							if (error) return res.status(400).json({ message: 'Creating token failed' });
+							if (error)
+								return res.status(400).json({
+									message: 'Creating token failed',
+									status: 400,
+									id: 'CREATING_TOKEN_FAILED',
+								});
 							res.status(201).json({
 								token: token,
 								user: {
