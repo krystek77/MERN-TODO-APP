@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 //User controller
 const UserController = require('../controllers/user');
 
-// @route 	POST users/signup
+// @route 	POST users
 // @desc 	Register new user
 // @access 	Public
 router.get('/', UserController.getAllUsers);

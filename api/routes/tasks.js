@@ -21,7 +21,9 @@ const upload = multer({
 //@desc		Get all tasks
 //@access	Private
 router.get('/', auth, (req, res, next) => {
-	Task.find()
+	const userId = req.user.id;
+	console.log(userId);
+	Task.find({ userId: userId })
 		.select('-__v')
 		.then(tasks => {
 			res.status(200).json(tasks);
@@ -46,14 +48,16 @@ router.get('/:idTask', (req, res, next) => {
 // @route 	POST tasks/
 // @desc 	Add new task
 // @access 	Private
-router.post('/', upload.single('image'), (req, res, next) => {
+router.post('/', auth, upload.single('image'), (req, res, next) => {
 	const { title, priority, description, deadline } = req.body;
+	const userId = req.user.id;
 
 	const task = new Task({
 		title: title,
 		priority: priority,
 		description: description,
 		deadline: deadline,
+		userId: userId,
 		createdAt: new Date().toISOString().slice(0, 10),
 		image: req.file ? req.file.path : '',
 	});

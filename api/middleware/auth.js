@@ -12,7 +12,7 @@ function auth(req, res, next) {
 	try {
 		const decoded = jwt.verify(token, config.get('jwtSecret'));
 		req.user = decoded;
-		console.log('DECODED TOKEN', decoded);
+		// console.log('DECODED TOKEN', decoded);
 		next();
 	} catch (e) {
 		res.status(400).json({ message: 'Token is not valid', status: 400 });

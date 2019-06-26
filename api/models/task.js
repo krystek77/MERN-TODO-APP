@@ -10,5 +10,6 @@ const taskSchema = new Schema({
 	updatedAt: { type: String },
 	deadline: { type: String },
 	image: { type: String },
+	userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 module.exports = Task = mongoose.model('Task', taskSchema);
