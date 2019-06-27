@@ -30,7 +30,7 @@ function App({ loadUser }) {
 		}
 		return () => {
 			// console.log('APP unmounted');
-			mounted = false;
+			mounted = false; 
 		};
 	}, [loadUser]);
 	return (
