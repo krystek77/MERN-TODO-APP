@@ -38,7 +38,7 @@ const styles = theme => ({
 });
 
 function Content({ classes, isAuthenticated }) {
-	return (
+	return ( 
 		<div className={classes.content}>
 			<Navigation isAuthenticated={isAuthenticated} />
 			<main className={classes.main}>
