@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 //
 const app = express();
 //
@@ -17,6 +18,17 @@ app.use(bodyParser.json());
 //Routes
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
+
+//Serve static files if in production version
+
+if (process.env.NODE_ENV === 'production') {
+	//Set static folder
+	app.use(express.static('client/build'));
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	});
+}
+
 //Handle errors
 app.use((req, res, next) => {
 	const error = new Error('NOT FOUNDED');
