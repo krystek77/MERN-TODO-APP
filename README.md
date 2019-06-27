@@ -27,8 +27,9 @@ npm run client
 ## Author
 
 Krystian Wrona
-
-### Version
+### Heroku
+https://secure-forest-69328.herokuapp.com/
+#### Version
 
 1.0.0
 
