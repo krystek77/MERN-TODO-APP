@@ -22,7 +22,7 @@ const upload = multer({
 //@access	Private
 router.get('/', auth, (req, res, next) => {
 	const userId = req.user.id;
-	console.log(userId);
+	// console.log(userId);
 	Task.find({ userId: userId })
 		.select('-__v')
 		.then(tasks => {

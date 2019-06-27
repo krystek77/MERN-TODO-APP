@@ -10,11 +10,11 @@ exports.getAllUsers = (req, res, next) => {
 		.select('-__v -password')
 		.sort({ createdAt: 'desc' })
 		.then(users => {
-			console.log(users);
+			// console.log(users);
 			res.status(200).json({ users: users, message: `Get users successfully` });
 		})
 		.catch(error => {
-			console.log(error);
+			// console.log(error);
 			res.status(200).json({ message: `Get users failed` });
 		});
 };
@@ -84,14 +84,14 @@ exports.signUp = (req, res, next) => {
 							);
 						})
 						.catch(error => {
-							console.log(error);
+							// console.log(error);
 							res.status(400).json({ message: 'User registration failed', status: 400 });
 						});
 				});
 			});
 		})
 		.catch(error => {
-			console.log(error);
+			// console.log(error);
 			res.status(500).json({ message: 'Something went wrong...' });
 		});
 };
