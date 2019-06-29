@@ -1,12 +1,20 @@
 const express = require('express');
-const morgan = require('express');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 //
 const app = express();
 //
-app.use(cors());
+
+app.use(
+	cors({
+		origin: '*',
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+		preflightContinue: false,
+		optionsSuccessStatus: 204,
+	})
+);
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
 const userRoutes = require('./api/routes/users');
