@@ -23,12 +23,16 @@ npm run server
 npm run client
 
 # Server runs on http://localhost:4000 and client on http://localhost:3000
-```
-## Author
+
+### Author
 
 Krystian Wrona
 
-### Version
+#### Heroku
+
+[Application link] https://secure-forest-69328.herokuapp.com/
+
+#### Version
 
 1.0.0
 
