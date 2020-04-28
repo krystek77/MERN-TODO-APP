@@ -2,6 +2,9 @@
 	"name": "mern-react-redux-todo-app",
 	"version": "1.0.0",
 	"description": "TODO MERN APP",
+	"engines":{
+    		"node": "12.16.x"
+  	},
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
