@@ -5,7 +5,7 @@ const config = require('config');
 const app = require('./app');
 //
 
-const PORT = 4000;
+const PORT = 3000;
 const server = http.createServer(app);
 server.listen(process.env.PORT || PORT, () => console.log(`Server running on ${PORT} port`));
 
