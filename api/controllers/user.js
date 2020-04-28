@@ -63,7 +63,7 @@ exports.signUp = (req, res, next) => {
 							//create token for registered user
 							jwt.sign(
 								{ id: user._id, email: user.email },
-								config.get('jwtSecret'),
+								process.env.SECRET || config.get("jwtSecret"),
 								{ expiresIn: 3600 },
 								(error, token) => {
 									if (error)
@@ -120,7 +120,7 @@ exports.signIn = (req, res, next) => {
 							.json({ message: 'Invalid credentials', status: 403, id: 'INVALID_CREDENTIALS' });
 					jwt.sign(
 						{ id: user._id, email: user.email },
-						config.get('jwtSecret'),
+						process.env.SECRET || config.get("jwtSecret"),
 						{ expiresIn: 3600 },
 						(error, token) => {
 							if (error)
