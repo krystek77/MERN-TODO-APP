@@ -13,7 +13,7 @@ server.listen(process.env.PORT || PORT, () => console.log(`Server running on ${P
 const db = config.get('mongoURI');
 
 moongose
-	.connect(db, {
+	.connect(process.env.MONGODB_URI || db, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
 	})
