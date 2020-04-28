@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: '*',
+		origin: 'https://mern-to-do-application.herokuapp.com/',
 		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 		preflightContinue: false,
 		optionsSuccessStatus: 204,
