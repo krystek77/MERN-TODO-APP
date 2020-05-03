@@ -3,7 +3,7 @@ example of todo application based on MERN stack
 
 > Todo application built with the MERN stack along with Redux for state management, Material UI.
 > You can upload image to discribe your task. Implemented authentication and authorization by JWT.
-> [Application link, HEROKU] - https://mern-to-do-application.herokuapp.com/
+> [Application link, HEROKU] - https://shielded-castle-83629.herokuapp.com/
 
 ## Quick Start
 
